@@ -96,7 +96,9 @@ function findUsbPrebuild(): string[] {
 
 	const bindingFiles = readdirSync(
 		path.join(usbPrebuildsFolder, platformFolder),
-	);
+	)?.filter((f) => f.endsWith('.node'));
+
+	console.log(bindingFiles);
 
 	if (!bindingFiles.length) {
 		throw new Error('Could not find usb prebuild for platform');
@@ -413,17 +415,4 @@ const etcherConfig = {
 	},
 };
 
-const childWriterConfig = {
-	...mainConfig,
-	entry: {
-		'child-writer': path.join(
-			__dirname,
-			'lib',
-			'gui',
-			'modules',
-			'child-writer.ts',
-		),
-	},
-};
-
-export default [guiConfig, etcherConfig, childWriterConfig];
+export default [guiConfig, etcherConfig];
