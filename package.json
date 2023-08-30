@@ -13,8 +13,8 @@
     "url": "git@github.com:balena-io/etcher.git"
   },
   "scripts": {
-    "build": "npm run build:sidecar && npm run webpack",
-    "build:sidecar": "tsc --project tsconfig.sidecar.json && pkg build/util/child-writer.js -c pkg-sidecar.json --target node18 --output binaries/etcher-util",
+    "build": "npm run webpack && npm run build:sidecar",
+    "build:sidecar": "tsc --project tsconfig.sidecar.json && pkg build/util/child-writer.js -c pkg-sidecar.json --target node16 --output generated/etcher-util",
     "flowzone-preinstall-linux": "sudo apt-get update && sudo apt-get install -y xvfb libudev-dev && cat < electron-builder.yml | yq e .deb.depends[] - | xargs -L1 echo | sed 's/|//g' | xargs -L1 sudo apt-get --ignore-missing install || true",
     "flowzone-preinstall-macos": "true",
     "flowzone-preinstall-windows": "npx node-gyp install",
@@ -125,7 +125,7 @@
     "webpack-dev-server": "4.11.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=16 <18"
   },
   "versionist": {
     "publishedAt": "2023-07-19T10:24:23.055Z"

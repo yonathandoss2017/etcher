@@ -35,7 +35,7 @@ ipc.config.socketRoot = path.join(
 ipc.config.silent = true;
 
 function writerArgv(): string[] {
-	const entryPoint = path.join('./binaries/etcher-util');
+	const entryPoint = path.join('./generated/etcher-util');
 	return [entryPoint];
 }
 

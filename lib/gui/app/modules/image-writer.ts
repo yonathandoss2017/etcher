@@ -93,7 +93,7 @@ function terminateServer() {
 }
 
 function writerArgv(): string[] {
-	let entryPoint = path.join(getAppPath(), 'binaries', 'etcher-util');
+	let entryPoint = path.join(getAppPath(), 'etcher-util');
 	// AppImages run over FUSE, so the files inside the mount point
 	// can only be accessed by the user that mounted the AppImage.
 	// This means we can't re-spawn Etcher as root from the same
