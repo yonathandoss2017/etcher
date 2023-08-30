@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as pathIsInside from 'path-is-inside';
 
 import * as messages from './messages';
-import { SourceMetadata } from '../gui/app/components/source-selector/source-selector';
+import { SourceMetadata } from './typings/source-selector';
 
 /**
  * @summary The default unknown size for things such as images and drives

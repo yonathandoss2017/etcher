@@ -24,8 +24,8 @@ import * as path from 'path';
 import * as packageJSON from '../../../../package.json';
 import * as errors from '../../../shared/errors';
 import * as permissions from '../../../shared/permissions';
-import { getAppPath } from '../../../shared/utils';
-import { SourceMetadata } from '../components/source-selector/source-selector';
+import { getAppPath } from '../../../shared/get-app-path';
+import { SourceMetadata } from '../../../shared/typings/source-selector';
 import * as flashState from '../models/flash-state';
 import * as selectionState from '../models/selection-state';
 import * as settings from '../models/settings';
@@ -93,7 +93,7 @@ function terminateServer() {
 }
 
 function writerArgv(): string[] {
-	let entryPoint = path.join(getAppPath(), 'generated', 'child-writer.js');
+	let entryPoint = path.join(getAppPath(), 'binaries', 'etcher-util');
 	// AppImages run over FUSE, so the files inside the mount point
 	// can only be accessed by the user that mounted the AppImage.
 	// This means we can't re-spawn Etcher as root from the same
@@ -148,6 +148,9 @@ async function performWrite(
 	let skip = false;
 	ipc.serve();
 	const { autoBlockmapping, decompressFirst } = await settings.getAll();
+
+	console.log({ image, drives });
+
 	return await new Promise((resolve, reject) => {
 		ipc.server.on('error', (error) => {
 			terminateServer();

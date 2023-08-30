@@ -23,7 +23,6 @@ import ChevronRightSvg from '@fortawesome/fontawesome-free/svgs/solid/chevron-ri
 import { sourceDestination } from 'etcher-sdk';
 import { ipcRenderer, IpcRendererEvent } from 'electron';
 import * as _ from 'lodash';
-import { GPTPartition, MBRPartition } from 'partitioninfo';
 import * as path from 'path';
 import * as prettyBytes from 'pretty-bytes';
 import * as React from 'react';
@@ -66,6 +65,11 @@ import { DriveSelector } from '../drive-selector/drive-selector';
 import { DrivelistDrive } from '../../../../shared/drive-constraints';
 import axios, { AxiosRequestConfig } from 'axios';
 import { isJson } from '../../../../shared/utils';
+import {
+	SourceMetadata,
+	Authentication,
+	Source,
+} from '../../../../shared/typings/source-selector';
 import * as i18next from 'i18next';
 
 const recentUrlImagesKey = 'recentUrlImages';
@@ -301,24 +305,6 @@ const FlowSelector = styled(
 	}
 `;
 
-export type Source =
-	| typeof sourceDestination.File
-	| typeof sourceDestination.BlockDevice
-	| typeof sourceDestination.Http;
-
-export interface SourceMetadata extends sourceDestination.Metadata {
-	hasMBR?: boolean;
-	partitions?: MBRPartition[] | GPTPartition[];
-	path: string;
-	displayName: string;
-	description: string;
-	SourceType: Source;
-	drive?: DrivelistDrive;
-	extension?: string;
-	archiveExtension?: string;
-	auth?: Authentication;
-}
-
 interface SourceSelectorProps {
 	flashing: boolean;
 }
@@ -334,11 +320,6 @@ interface SourceSelectorState {
 	defaultFlowActive: boolean;
 	imageSelectorOpen: boolean;
 	imageLoading: boolean;
-}
-
-interface Authentication {
-	username: string;
-	password: string;
 }
 
 export class SourceSelector extends React.Component<

@@ -33,12 +33,14 @@ import { cleanupTmpFiles } from 'etcher-sdk/build/tmp';
 import * as ipc from 'node-ipc';
 import { totalmem } from 'os';
 
-import { toJSON } from '../../shared/errors';
-import { GENERAL_ERROR, SUCCESS } from '../../shared/exit-codes';
-import { delay, isJson } from '../../shared/utils';
-import { SourceMetadata } from '../app/components/source-selector/source-selector';
+import { toJSON } from '../shared/errors';
+import { GENERAL_ERROR, SUCCESS } from '../shared/exit-codes';
+import { delay, isJson } from '../shared/utils';
+import { SourceMetadata } from '../shared/typings/source-selector';
 import axios from 'axios';
-import * as _ from 'lodash';
+import { omit } from 'lodash';
+
+console.log('starting child-writer.ts');
 
 ipc.config.id = process.env.IPC_CLIENT_ID as string;
 ipc.config.socketRoot = process.env.IPC_SOCKET_ROOT as string;
@@ -63,6 +65,9 @@ const IPC_SERVER_ID = process.env.IPC_SERVER_ID as string;
  * @summary Send a log debug message to the IPC server
  */
 function log(message: string) {
+	if (console?.log) {
+		console.log(message);
+	}
 	ipc.of[IPC_SERVER_ID].emit('log', message);
 }
 
@@ -70,6 +75,9 @@ function log(message: string) {
  * @summary Terminate the child writer process
  */
 async function terminate(exitCode: number) {
+	if (console?.log) {
+		console.log('will terminate: ', exitCode);
+	}
 	ipc.disconnect(IPC_SERVER_ID);
 	await cleanupTmpFiles(Date.now(), DECOMPRESSED_IMAGE_PREFIX);
 	process.nextTick(() => {
@@ -177,6 +185,10 @@ interface WriteOptions {
 }
 
 ipc.connectTo(IPC_SERVER_ID, () => {
+	if (console.log) {
+		console.log('connected to IPC server');
+	}
+
 	// Remove leftover tmp files older than 1 hour
 	cleanupTmpFiles(Date.now() - 60 * 60 * 1000);
 	process.once('uncaughtException', handleError);
@@ -290,7 +302,7 @@ ipc.connectTo(IPC_SERVER_ID, () => {
 						source = new Http({
 							url: imagePathObject.url,
 							avoidRandomAccess: true,
-							axiosInstance: axios.create(_.omit(imagePathObject, ['url'])),
+							axiosInstance: axios.create(omit(imagePathObject, ['url'])),
 							auth: options.image.auth,
 						});
 					} else {
