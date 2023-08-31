@@ -9,8 +9,6 @@ files:
   - generated
   - lib/shared/catalina-sudo/sudo-askpass.osascript-zh.js
   - lib/shared/catalina-sudo/sudo-askpass.osascript-en.js
-extraResources:
-  - generated/etcher-util
 mac:
   icon: assets/icon.icns
   category: public.app-category.developer-tools

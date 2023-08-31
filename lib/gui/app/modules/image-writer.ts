@@ -92,10 +92,8 @@ function terminateServer() {
 	ipc.server.stop();
 }
 
-// to test in development mode, add `'generated'` in the path before `'etcher-util'`
 function writerArgv(): string[] {
-	// let entryPoint = path.join(getAppPath(), 'etcher-util');
-	let entryPoint = process.resourcesPath;
+	let entryPoint = path.join(getAppPath(), 'generated', 'etcher-util');
 	// AppImages run over FUSE, so the files inside the mount point
 	// can only be accessed by the user that mounted the AppImage.
 	// This means we can't re-spawn Etcher as root from the same
