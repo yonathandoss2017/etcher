@@ -92,6 +92,7 @@ function terminateServer() {
 	ipc.server.stop();
 }
 
+// to test in development mode, add `'generated'` in the path before `'etcher-util'`
 function writerArgv(): string[] {
 	let entryPoint = path.join(getAppPath(), 'etcher-util');
 	// AppImages run over FUSE, so the files inside the mount point
@@ -107,7 +108,7 @@ function writerArgv(): string[] {
 			`require(\`\${process.env.APPDIR}${entryPoint}\`)`,
 		];
 	} else {
-		return [process.argv[0], entryPoint];
+		return [entryPoint];
 	}
 }
 
